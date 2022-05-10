@@ -5,6 +5,13 @@ export function updateHeader () {
   // TODO: Select the existing header element and append to it :
   //        * An 'h1' element with text : 'TP1'
   //        * A'div' element with text : 'Bienvenue au cours INF8808 : Visualisation de données.'
+  const h1Element = document.createElement('h1')
+  h1Element.innerHTML = 'TP1'
+  const divElement = document.createElement('div')
+  divElement.innerHTML = 'Bienvenue au cours INF8808 : Visualisation de données.'
+  const headerElement = document.querySelectorAll('header')[0]
+  headerElement.appendChild(h1Element)
+  headerElement.appendChild(divElement)
 }
 
 /**
@@ -30,7 +37,15 @@ export function updateHeader () {
  */
 export function generateData () {
   // TODO: Generate the data structure described above and return it.
-  return []
+  const data = []
+  const m = Math.floor(Math.random() * 10) + 1
+  for (let i = 0; i < m; i++) {
+    // x and y are random integers in [1, 99]
+    const x = Math.floor(Math.random() * 99) + 1
+    const y = Math.floor(Math.random() * 99) + 1
+    data.push({ x, y })
+  }
+  return data
 }
 
 /**
@@ -38,7 +53,7 @@ export function generateData () {
  */
 export function getDotCount () {
   // TODO : Return number of currently displayed circles
-  return 0
+  return d3.selectAll('.dot').size()
 }
 
 /**
@@ -49,6 +64,9 @@ export function updateInfoPanel () {
   // TODO: Get the current dot count and diplay it in the information panel.
   // Make sure the label says 'point' or 'points' depending how many points there are.
   // see : getDotCount()
+  const dotCount = getDotCount()
+  const label = dotCount === 1 ? 'point' : 'points'
+  d3.select('.info-panel').text(`${dotCount} ${label}`)
 }
 
 /**
@@ -59,4 +77,7 @@ export function updateInfoPanel () {
  */
 export function styleCircles (g) {
   // TO DO: Select all the circles and set their fill and radius as specified above
+  g.selectAll('.dot')
+    .attr('fill', '#07BEB8')
+    .attr('r', 5)
 }
