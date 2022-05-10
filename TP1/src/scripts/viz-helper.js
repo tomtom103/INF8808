@@ -66,7 +66,8 @@ export function updateInfoPanel () {
   // see : getDotCount()
   const dotCount = getDotCount()
   const label = dotCount === 1 ? 'point' : 'points'
-  d3.select('.info-panel').text(`${dotCount} ${label}`)
+  d3.select('.dot-count').text(`${dotCount}`)
+  d3.select('.dot-label').text(label)
 }
 
 /**
