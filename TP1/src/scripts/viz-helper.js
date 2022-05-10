@@ -5,13 +5,10 @@ export function updateHeader () {
   // TODO: Select the existing header element and append to it :
   //        * An 'h1' element with text : 'TP1'
   //        * A'div' element with text : 'Bienvenue au cours INF8808 : Visualisation de données.'
-  const h1Element = document.createElement('h1')
-  h1Element.innerHTML = 'TP1'
-  const divElement = document.createElement('div')
-  divElement.innerHTML = 'Bienvenue au cours INF8808 : Visualisation de données.'
-  const headerElement = document.querySelectorAll('header')[0]
-  headerElement.appendChild(h1Element)
-  headerElement.appendChild(divElement)
+  const header = d3.select('header')
+
+  header.append('h1').text('TP1')
+  header.append('div').text('Bienvenue au cours INF8808 : Visualisation de données.')
 }
 
 /**
@@ -37,15 +34,15 @@ export function updateHeader () {
  */
 export function generateData () {
   // TODO: Generate the data structure described above and return it.
-  const data = []
-  const m = Math.floor(Math.random() * 10) + 1
-  for (let i = 0; i < m; i++) {
-    // x and y are random integers in [1, 99]
-    const x = Math.floor(Math.random() * 99) + 1
-    const y = Math.floor(Math.random() * 99) + 1
-    data.push({ x, y })
-  }
-  return data
+  const size = d3.randomUniform(1, 11)()
+
+  const uniformGenerator = d3.randomUniform(1, 100)
+  return Array.from({ length: size }, () => {
+    return {
+      x: uniformGenerator(),
+      y: uniformGenerator()
+    }
+  })
 }
 
 /**
@@ -65,9 +62,8 @@ export function updateInfoPanel () {
   // Make sure the label says 'point' or 'points' depending how many points there are.
   // see : getDotCount()
   const dotCount = getDotCount()
-  const label = dotCount === 1 ? 'point' : 'points'
-  d3.select('.dot-count').text(`${dotCount}`)
-  d3.select('.dot-label').text(label)
+  d3.select('.dot-count').text(dotCount)
+  d3.select('.dot-label').text(dotCount > 1 ? 'points' : 'point')
 }
 
 /**
