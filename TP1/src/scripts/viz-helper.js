@@ -36,11 +36,10 @@ export function generateData () {
   // TODO: Generate the data structure described above and return it.
   const size = d3.randomUniform(1, 11)()
 
-  const uniformGenerator = d3.randomUniform(1, 100)
   return Array.from({ length: size }, () => {
     return {
-      x: uniformGenerator(),
-      y: uniformGenerator()
+      x: d3.randomUniform(1, 100)(),
+      y: d3.randomUniform(1, 100)()
     }
   })
 }
@@ -77,4 +76,17 @@ export function styleCircles (g) {
   g.selectAll('.dot')
     .attr('fill', '#07BEB8')
     .attr('r', 5)
+}
+
+/**
+ * Selects all the SVG circles and sets their visual appearance.
+ * Sets their radius to a random number in [1, 20] and their fill color to a random color from the d3.schemeCategory10 palette.
+ *
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ */
+export function styleRainbowCircles (g) {
+  const colors = d3.schemeCategory10
+  g.selectAll('.dot')
+    .attr('fill', (_d, i) => colors[i])
+    .attr('r', () => d3.randomUniform(1, 20)())
 }

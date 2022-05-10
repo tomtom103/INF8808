@@ -1,4 +1,4 @@
-import { generateData, styleCircles, updateInfoPanel } from './viz-helper.js'
+import { generateData, styleCircles, updateInfoPanel, styleRainbowCircles } from './viz-helper.js'
 
 /**
  * Sets the size of the SVG canvas containing the graph.
@@ -113,11 +113,26 @@ export function positionCircles (g, xScale, yScale) {
  * @param {*} yScale The xScale used to display the graph
  */
 export function setClickHandler (g, xScale, yScale) {
+  let interval
+
   d3.select('#update-btn')
     .on('click', () => {
       updateData(g, generateData())
       positionCircles(g, xScale, yScale)
       styleCircles(g)
       updateInfoPanel()
+      clearInterval(interval)
+    })
+
+  d3.select('#rainbow-btn')
+    .on('click', () => {
+      // Check to make sure we dont have an interval already running
+      clearInterval(interval)
+
+      interval = setInterval(() => {
+        updateData(g, generateData())
+        positionCircles(g, xScale, yScale)
+        styleRainbowCircles(g)
+      }, 100)
     })
 }
