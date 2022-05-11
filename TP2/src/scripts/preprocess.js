@@ -1,4 +1,3 @@
-
 /**
  * Sanitizes the names from the data in the "Player" column.
  *
@@ -8,8 +7,15 @@
  * @returns {object[]} The dataset with properly capitalized names
  */
 export function cleanNames (data) {
-  // TODO: Clean the player name data
-  return []
+  return data.map((value) => {
+    let playerName = value.Player.toLowerCase()
+    playerName = playerName[0].toUpperCase() + playerName.slice(1)
+
+    return {
+      ...value,
+      Player: playerName
+    }
+  })
 }
 
 /**
@@ -19,8 +25,16 @@ export function cleanNames (data) {
  * @returns {string[]} The names of the top 5 players with most lines
  */
 export function getTopPlayers (data) {
-  // TODO: Find the five top players with the most lines in the play
-  return []
+  const playerNameMap = new Map()
+  data.forEach((value) => {
+    if (playerNameMap.has(value.Player)) {
+      playerNameMap.set(value.Player, playerNameMap.get(value.Player) + 1)
+    } else {
+      playerNameMap.set(value.Player, 1)
+    }
+  })
+  const sortedMap = [...playerNameMap].sort((a, b) => b[1] - a[1])
+  return sortedMap.slice(0, 5).map((value) => value[0])
 }
 
 /**
@@ -47,8 +61,21 @@ export function getTopPlayers (data) {
  * @returns {object[]} The nested data set grouping the line count by player and by act
  */
 export function summarizeLines (data) {
-  // TODO : Generate the data structure as defined above
-  return []
+  return d3.nest()
+    .key((value) => value.Act)
+    .key((value) => value.Player)
+    .entries(data)
+    .map((value) => {
+      return {
+        Act: value.key,
+        Players: value.values.map((player) => {
+          return {
+            Player: player.key,
+            Count: player.values.length
+          }
+        })
+      }
+    })
 }
 
 /**
@@ -61,8 +88,17 @@ export function summarizeLines (data) {
  * @returns {object[]} The dataset with players not in the top 5 summarized as 'Other'
  */
 export function replaceOthers (data, top) {
-  // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
-  // and replace these players in the data structure by a player with name 'Other' and
-  // a line count corresponding to the sum of lines
-  return []
+  return data.map((value) => {
+    const otherPlayerLinesCount = value.Players.filter((player) => !top.includes(player.Player)).reduce((acc, curr) => acc + curr.Count, 0)
+    return {
+      ...value,
+      Players: [
+        ...value.Players.filter((player) => top.includes(player.Player)),
+        {
+          Player: 'Other',
+          Count: otherPlayerLinesCount
+        }
+      ]
+    }
+  })
 }

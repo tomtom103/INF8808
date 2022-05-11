@@ -1,24 +1,31 @@
-
 /**
  * Sets the domain and range of the X scale.
  *
  * @param {*} scale The x scale
  * @param {object[]} data The data to be used
  * @param {number} width The width of the graph
+ * @returns
  */
 export function updateGroupXScale (scale, data, width) {
   // TODO : Set the domain and range of the groups' x scale
+  return d3.scaleLinear()
+    .domain([0, scale(data, d => d)])
+    .range([0, width])
 }
-
 /**
  * Sets the domain and range of the Y scale.
  *
  * @param {*} scale The Y scale
  * @param {object[]} data The data to be used
  * @param {number} height The height of the graph
+ * @returns
  */
 export function updateYScale (scale, data, height) {
   // TODO : Set the domain and range of the graph's y scale
+  const myData = d3.scaleLinear()
+    .domain([0, scale(data, d => d.value)])
+    .range([height, 0])
+  return myData
 }
 
 /**
@@ -30,7 +37,12 @@ export function updateYScale (scale, data, height) {
  */
 export function createGroups (data, x) {
   // TODO : Create the groups
-  d3.select('#graph-g')
+  const myGraph = d3.select('#graph-g')
+  for (const [act, val] of data.entries()) {
+    myGraph.append('g')
+      .data([data[act]])
+      .attr('class', 'group')
+  }
 }
 
 /**
@@ -45,5 +57,10 @@ export function createGroups (data, x) {
  */
 export function drawBars (y, xSubgroup, players, height, color, tip) {
   // TODO : Draw the bars
-  d3.select('#graph-g')
+  // const myGraph = d3.select('#graph-g')
+  // d3.selectAll('g.group')
+  //   .each(function (d) {
+  //     let width = xSubgroup
+  //   })
+  console.log(y, xSubgroup, players, height, color, tip)
 }
