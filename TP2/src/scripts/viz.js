@@ -7,16 +7,9 @@
  * @returns
  */
 export function updateGroupXScale (scale, data, width) {
-  //TODO : Set the domain and range of the groups' x scale
-  return d3.scaleLinear()
-    .domain([0, scale(data, d => d)])
-    .range([0, width])
-
-
-  // Ce que je pense qu'il faut faire (slim)
-  // return scale
-  // .domain([1,d3.max(data, function(d){return d.Act})])//en X on veut les actes
-  // .range([0, width])
+  return scale
+  .domain(data.map((value)=> value.Act))//en X on veut les actes
+  .range([0, width])
 
 }
 /**
@@ -28,18 +21,11 @@ export function updateGroupXScale (scale, data, width) {
  * @returns
  */
 export function updateYScale (scale, data, height) {
-  // TODO : Set the domain and range of the graph's y scale
-  const myData = d3.scaleLinear()
-    .domain([0, scale(data, d => d.value)])
-    .range([height, 0])
-  return myData
-
-  // Ce que je pense qu'il faut faire (slim)
-  // return scale
-  // .domain([0,d3.max(data, function(d){return d.Count})])//en y on veut le count
-  // .range([height,0])
+  let maxCount = Math.max(...data.map((value) => Math.max(...value.Players.map(v=>v.Count))))
+  return scale
+  .domain([0,maxCount])//en y on veut le count
+  .range([height,0])
 }
-
 /**
  * Creates the groups for the grouped bar chart and appends them to the graph.
  * Each group corresponds to an act.
