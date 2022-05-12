@@ -7,10 +7,17 @@
  * @returns
  */
 export function updateGroupXScale (scale, data, width) {
-  // TODO : Set the domain and range of the groups' x scale
+  //TODO : Set the domain and range of the groups' x scale
   return d3.scaleLinear()
     .domain([0, scale(data, d => d)])
     .range([0, width])
+
+
+  // Ce que je pense qu'il faut faire (slim)
+  // return scale
+  // .domain([1,d3.max(data, function(d){return d.Act})])//en X on veut les actes
+  // .range([0, width])
+
 }
 /**
  * Sets the domain and range of the Y scale.
@@ -26,6 +33,11 @@ export function updateYScale (scale, data, height) {
     .domain([0, scale(data, d => d.value)])
     .range([height, 0])
   return myData
+
+  // Ce que je pense qu'il faut faire (slim)
+  // return scale
+  // .domain([0,d3.max(data, function(d){return d.Count})])//en y on veut le count
+  // .range([height,0])
 }
 
 /**
