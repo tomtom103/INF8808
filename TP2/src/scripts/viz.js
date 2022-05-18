@@ -8,9 +8,8 @@
  */
 export function updateGroupXScale (scale, data, width) {
   return scale
-  .domain(data.map((value)=> value.Act))//en X on veut les actes
-  .range([0, width])
-
+    .domain(data.map((value) => value.Act)) // en X on veut les actes
+    .range([0, width])
 }
 /**
  * Sets the domain and range of the Y scale.
@@ -21,10 +20,10 @@ export function updateGroupXScale (scale, data, width) {
  * @returns
  */
 export function updateYScale (scale, data, height) {
-  let maxCount = Math.max(...data.map((value) => Math.max(...value.Players.map(v=>v.Count))))
+  const maxCount = Math.max(...data.map((value) => Math.max(...value.Players.map((v) => v.Count))))
   return scale
-  .domain([0,maxCount])//en y on veut le count
-  .range([height,0])
+    .domain([0, maxCount])
+    .range([height, 0])
 }
 /**
  * Creates the groups for the grouped bar chart and appends them to the graph.
@@ -35,12 +34,13 @@ export function updateYScale (scale, data, height) {
  */
 export function createGroups (data, x) {
   // TODO : Create the groups
-  const myGraph = d3.select('#graph-g')
-  for (const [act, val] of data.entries()) {
-    myGraph.append('g')
-      .data([data[act]])
-      .attr('class', 'group')
-  }
+  d3.select('#graph-g')
+    .selectAll('.group')
+    .data(data)
+    .enter()
+    .append('g')
+    .attr('class', 'group')
+    .attr('tranform', (group) => `translate(${x(group.Act)})`)
 }
 
 /**
@@ -55,10 +55,38 @@ export function createGroups (data, x) {
  */
 export function drawBars (y, xSubgroup, players, height, color, tip) {
   // TODO : Draw the bars
-  // const myGraph = d3.select('#graph-g')
-  // d3.selectAll('g.group')
-  //   .each(function (d) {
-  //     let width = xSubgroup
-  //   })
-  console.log(y, xSubgroup, players, height, color, tip)
+  d3.select('#graph-g')
+    .selectAll('.group')
+    .selectAll('rect')
+    .data((d) => {
+      const modifiedData = d.Players.map((player) => {
+        return {
+          ...player,
+          Act: d.Act
+        }
+      })
+      // { Player: 'Juliet', Count: 25, Act: 'Act 1' }
+      // { Player: 'Romeo', Count: 50, Act: 'Act 2' }
+      console.log(modifiedData)
+      return modifiedData
+    })
+    .join('rect')
+    .attr('x', (data, i) => (data[i].Act) * xSubgroup.range()[1] / data.length)
+    .attr('y', (data, i) => y(data[i].Count))
+    .attr('width', (data) => xSubgroup.range()[1] / data.length)
+    .attr('height', (data, i) => data[i].Count / y.domain()[1] * height)
+    .attr('fill', (_player, i) => color(i))
+    // .each((group, idx, nodes) => {
+    //   const barWidth = xSubgroup.range()[1] / players.length
+    //   d3.select(nodes[idx])
+    //     .selectAll('rect')
+    //     .data(group.Players)
+    //     .enter()
+    //     .append('rect')
+    //     .attr('x', (_player, i) => (i + 1) * barWidth)
+    //     .attr('y', data => y(data.Count))
+    //     .attr('width', barWidth)
+    //     .attr('height', data => data.Count / y.domain()[1] * height)
+    //     .attr('fill', (_player, i) => color(i))
+    // })
 }
