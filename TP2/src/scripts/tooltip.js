@@ -15,5 +15,38 @@ export function getContents (d) {
       + A bold label for the player's line count
         followed by the number of lines
   */
-  return ''
+  const toolTip = d3.create()
+
+  toolTip.append('div')
+    .append('p')
+    .attr('id', 'tooltip-title')
+    .text('Act ' + d.Act)
+
+  const toolTipData = d3.create().append('div')
+
+  toolTipData.append('div')
+    .style('margin-top', '-20px')
+    .style('display', 'flex')
+    .append('p')
+    .style('font-weight', 'bold')
+    .text('Player :')
+    .append('p')
+    .text(' ' + d.Player)
+    .attr('class', 'tooltip-value')
+    .style('padding-left', '5px')
+
+  toolTipData.append('div')
+    .style('margin-top', '-25px')
+    .style('display', 'flex')
+    .append('p')
+    .style('font-weight', 'bold')
+    .text('Count :')
+    .append('p')
+    .text(' ' + d.Count)
+    .attr('class', 'tooltip-value')
+    .style('padding-left', '5px')
+
+  toolTip.append(() => toolTipData.node())
+
+  return toolTip.html()
 }

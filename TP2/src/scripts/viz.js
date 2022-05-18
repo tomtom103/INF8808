@@ -37,10 +37,9 @@ export function createGroups (data, x) {
   d3.select('#graph-g')
     .selectAll('.group')
     .data(data)
-    .enter()
-    .append('g')
+    .join('g')
     .attr('class', 'group')
-    .attr('tranform', (group) => `translate(${x(group.Act)})`)
+    .attr('transform', (group) => 'translate(' + Math.round(x(group.Act)) + ')')
 }
 
 /**
@@ -59,34 +58,19 @@ export function drawBars (y, xSubgroup, players, height, color, tip) {
     .selectAll('.group')
     .selectAll('rect')
     .data((d) => {
-      const modifiedData = d.Players.map((player) => {
+      return d.Players.map((player) => {
         return {
           ...player,
           Act: d.Act
         }
       })
-      // { Player: 'Juliet', Count: 25, Act: 'Act 1' }
-      // { Player: 'Romeo', Count: 50, Act: 'Act 2' }
-      console.log(modifiedData)
-      return modifiedData
     })
     .join('rect')
-    .attr('x', (data, i) => (data[i].Act) * xSubgroup.range()[1] / data.length)
-    .attr('y', (data, i) => y(data[i].Count))
-    .attr('width', (data) => xSubgroup.range()[1] / data.length)
-    .attr('height', (data, i) => data[i].Count / y.domain()[1] * height)
-    .attr('fill', (_player, i) => color(i))
-    // .each((group, idx, nodes) => {
-    //   const barWidth = xSubgroup.range()[1] / players.length
-    //   d3.select(nodes[idx])
-    //     .selectAll('rect')
-    //     .data(group.Players)
-    //     .enter()
-    //     .append('rect')
-    //     .attr('x', (_player, i) => (i + 1) * barWidth)
-    //     .attr('y', data => y(data.Count))
-    //     .attr('width', barWidth)
-    //     .attr('height', data => data.Count / y.domain()[1] * height)
-    //     .attr('fill', (_player, i) => color(i))
-    // })
+    .attr('x', (d) => xSubgroup(d.Player))
+    .attr('y', (d) => y(d.Count))
+    .attr('width', xSubgroup.range()[1] / players.length)
+    .attr('height', (d) => height - y(d.Count))
+    .attr('fill', (d) => color(d.Player))
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide)
 }
