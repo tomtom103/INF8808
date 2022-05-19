@@ -6,7 +6,7 @@
  */
 export function getNeighborhoodNames (data) {
   // TODO: Return the neihborhood names
-  return []
+  return [...new Set(data.map(d => d.Arrond_Nom))]
 }
 
 /**
@@ -19,7 +19,10 @@ export function getNeighborhoodNames (data) {
  */
 export function filterYears (data, start, end) {
   // TODO : Filter the data by years
-  return []
+  return data.filter(d => {
+    const date = new Date(Date.parse(d.Date_Plantation))
+    return date.getFullYear() >= start && date.getFullYear() <= end
+  })
 }
 
 /**
@@ -31,7 +34,19 @@ export function filterYears (data, start, end) {
  */
 export function summarizeYearlyCounts (data) {
   // TODO : Construct the required data table
-  return []
+  return data.reduce((acc, d) => {
+    // Get plantation year
+    const plantationYear = new Date(Date.parse(d.Date_Plantation)).getFullYear()
+    // Find all entries with the same neighborhood and year
+    const entry = acc.find((e) => e.Arrond_Nom === d.Arrond_Nom && e.Plantation_Year === plantationYear)
+    // If entry exists, increment count
+    entry ? entry.Counts++ : acc.push({
+      Arrond_Nom: d.Arrond_Nom,
+      Plantation_Year: plantationYear,
+      Counts: 1
+    })
+    return acc
+  }, [] /* Initial value */)
 }
 
 /**
