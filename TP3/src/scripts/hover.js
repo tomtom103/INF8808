@@ -14,6 +14,16 @@
  */
 export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, selectTicks, unselectTicks) {
   // TODO : Select the squares and set their event handlers
+  d3.selectAll('.data-rect')
+    .on('mouseover', function () {
+      rectSelected(this, xScale, yScale)
+      const data = d3.select(this).datum()
+      selectTicks(data.Arrond_Nom, data.Plantation_Year)
+    })
+    .on('mouseout', function () {
+      rectUnselected(this)
+      unselectTicks()
+    })
 }
 
 /**
@@ -31,6 +41,17 @@ export function rectSelected (element, xScale, yScale) {
   // TODO : Display the number of trees on the selected element
   // Make sure the nimber is centered. If there are 1000 or more
   // trees, display the text in white so it contrasts with the background.
+  element.style.opacity = 0.75
+  const data = d3.select(element).datum()
+
+  const boundingBox = d3.select(element).node().getBBox()
+
+  d3.select(element).append('text')
+    .attr('x', xScale(data.Plantation_Year) + boundingBox.width / 3)
+    .attr('y', yScale(data.Arrond_Nom) + boundingBox.height / 1.5)
+    .attr('pointer-events', 'none')
+    .attr('fill', data.Counts < 1000 ? 'black' : 'white')
+    .text(data.Counts)
 }
 
 /**
@@ -44,6 +65,8 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
+  element.style.opacity = 1
+  d3.select(element).selectAll('text').remove()
 }
 
 /**
@@ -54,6 +77,10 @@ export function rectUnselected (element) {
  */
 export function selectTicks (name, year) {
   // TODO : Make the ticks bold
+  d3.selectAll('g.tick')
+    .filter((d) => d === name || d === year)
+    .select('text')
+    .style('font-weight', 'bold')
 }
 
 /**
@@ -61,4 +88,7 @@ export function selectTicks (name, year) {
  */
 export function unselectTicks () {
   // TODO : Unselect the ticks
+  d3.selectAll('g.tick')
+    .select('text')
+    .style('font-weight', 'normal')
 }

@@ -77,20 +77,20 @@ button:hover, button:active {
 
 .tick line{
     visibility: hidden;
-  }
+}
 
-  .info {
-      pointer-events: none;
-      font-family: 'Roboto';
-  }
+.info {
+    pointer-events: none;
+    font-family: 'Roboto';
+}
 
-  .axis text {
-      font-family: 'Roboto';
-      cursor: default;
-      transform-box: fill-box;
-      transform-origin: center;
-  }
+.axis text {
+    font-family: 'Roboto';
+    cursor: default;
+    transform-box: fill-box;
+    transform-origin: center;
+}
 
-  .axis path {
-      opacity: 0;
-  }
+.axis path {
+    opacity: 0;
+}
