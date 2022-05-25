@@ -48,7 +48,7 @@ export function rectSelected (element, xScale, yScale) {
 
   d3.select(element).append('text')
     .attr('x', xScale(data.Plantation_Year) + boundingBox.width / 3)
-    .attr('y', yScale(data.Arrond_Nom) + boundingBox.height / 1.5)
+    .attr('y', yScale(data.Arrond_Nom) + boundingBox.height * 0.75)
     .attr('pointer-events', 'none')
     .attr('fill', data.Counts < 1000 ? 'black' : 'white')
     .text(data.Counts)
