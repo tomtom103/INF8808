@@ -10,7 +10,14 @@
  */
 export function setRadiusScale (data) {
   // TODO : Set scale
-  return {}
+  const maxValues = []
+  for (const year in data) {
+    maxValues.push(d3.max(data[year], d => d.Population))
+  }
+  console.log(maxValues)
+  return d3.scaleLinear()
+    .domain([0, d3.max(maxValues)])
+    .range([5, 20])
 }
 
 /**
@@ -25,7 +32,11 @@ export function setRadiusScale (data) {
  */
 export function setColorScale (data) {
   // TODO : Set scale
-  return {}
+  const allContinents = new Set()
+  Object.keys(data).forEach((year) => data[year].map(country => country.Continent).forEach(continent => allContinents.add(continent)))
+  return d3.scaleOrdinal()
+    .domain([...allContinents])
+    .range(d3.schemeCategory10)
 }
 
 /**
@@ -37,7 +48,13 @@ export function setColorScale (data) {
  */
 export function setXScale (width, data) {
   // TODO : Set scale
-  return {}
+  const maxValues = []
+  for (const year in data) {
+    maxValues.push(Math.max(...data[year].map((val) => val.GDP)))
+  }
+  return d3.scaleLinear()
+    .domain([0, Math.max(...maxValues)])
+    .range([0, width])
 }
 
 /**
@@ -49,5 +66,11 @@ export function setXScale (width, data) {
  */
 export function setYScale (height, data) {
   // TODO : Set scale
-  return {}
+  const maxValues = []
+  for (const year in data) {
+    maxValues.push(Math.max(...data[year].map((val) => val.CO2)))
+  }
+  return d3.scaleLinear()
+    .domain([Math.max(...maxValues), 0])
+    .range([0, height])
 }

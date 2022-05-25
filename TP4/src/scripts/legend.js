@@ -1,4 +1,4 @@
-import d3Legend from 'd3-svg-legend'
+const d3Legend = require('d3-svg-legend')
 
 /**
  * Draws the legend.
