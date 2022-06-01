@@ -10,13 +10,10 @@
  */
 export function setRadiusScale (data) {
   // TODO : Set scale
-  const maxValues = []
-  for (const year in data) {
-    maxValues.push(d3.max(data[year], d => d.Population))
-  }
-  console.log(maxValues)
+  const allData = [...data['2000'], ...data['2015']]
+  const max = d3.max(allData, d => d.Population)
   return d3.scaleLinear()
-    .domain([0, d3.max(maxValues)])
+    .domain([0, max])
     .range([5, 20])
 }
 
@@ -35,7 +32,7 @@ export function setColorScale (data) {
   const allContinents = new Set()
   Object.keys(data).forEach((year) => data[year].map(country => country.Continent).forEach(continent => allContinents.add(continent)))
   return d3.scaleOrdinal()
-    .domain([...allContinents])
+    .domain([...allContinents].sort())
     .range(d3.schemeCategory10)
 }
 
@@ -48,12 +45,12 @@ export function setColorScale (data) {
  */
 export function setXScale (width, data) {
   // TODO : Set scale
-  const maxValues = []
-  for (const year in data) {
-    maxValues.push(Math.max(...data[year].map((val) => val.GDP)))
-  }
-  return d3.scaleLinear()
-    .domain([0, Math.max(...maxValues)])
+  const allData = [...data['2000'], ...data['2015']]
+  const min = d3.min(allData, d => d.GDP)
+  const max = d3.max(allData, d => d.GDP)
+
+  return d3.scaleLog()
+    .domain([min, max])
     .range([0, width])
 }
 
@@ -66,11 +63,10 @@ export function setXScale (width, data) {
  */
 export function setYScale (height, data) {
   // TODO : Set scale
-  const maxValues = []
-  for (const year in data) {
-    maxValues.push(Math.max(...data[year].map((val) => val.CO2)))
-  }
-  return d3.scaleLinear()
-    .domain([Math.max(...maxValues), 0])
-    .range([0, height])
+  const allData = [...data['2000'], ...data['2015']]
+  const min = d3.min(allData, d => d.CO2)
+  const max = d3.max(allData, d => d.CO2)
+  return d3.scaleLog()
+    .domain([min, max])
+    .range([height, 0])
 }

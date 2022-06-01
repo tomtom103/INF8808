@@ -8,5 +8,13 @@
  */
 export function getContents (d) {
   // TODO : Generate tooltip contents
-  return ''
+  return `
+    <span>Country : <span class="tooltip-value">${d['Country Name']}</span></span>
+    <br>
+    <span>Population : <span class="tooltip-value">${d.Population}</span></span>
+    <br>
+    <span>GDP :<span class="tooltip-value"> ${d.GDP}</span></span>
+    <br>
+    <span>CO2 Emissions : <span class="tooltip-value">${d.CO2}</span</span>
+  `
 }
