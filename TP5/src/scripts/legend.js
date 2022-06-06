@@ -12,12 +12,11 @@ export function drawLegend (colorScale, g) {
   var legend = d3Legend.legendColor()
     .shape('path', d3.symbol().type(d3.symbolCircle).size(300)())
     .scale(colorScale)
-    .title('Legend')
+    .title('Légende')
 
   g.append('g')
     .attr('class', 'legend')
     .attr('transform', 'translate(50, 150)')
-
-  g.select('.legend')
+    .attr('font-size', '14px')
     .call(legend)
 }
